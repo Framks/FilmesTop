@@ -15,19 +15,21 @@ class AluguelService:
     def alugar(self, id_usuario, filme_id):
         try:
             usuario = self.usuario_repository.get_by_id(id_usuario)
-            if not usuario:
+            if usuario is None:
                 return None
 
             filme_obj = self.filme_repository.get_by_id(filme_id)
-            if not filme_obj:
+            if filme_obj is None:
                 return None
 
             aluguel_existente = self.repository.get_aluguel(id_usuario, filme_obj.id)
-            if aluguel_existente:
+            if aluguel_existente is not None:
                 return None
 
             novo_aluguel = Aluguel(usuario_id=id_usuario, filme_id=filme_obj.id, data_aluguel=datetime.now())
-            return self.repository.save(novo_aluguel).to_dict()
+            novo_aluguel = self.repository.save(novo_aluguel)
+
+            return novo_aluguel.to_dict()
 
         except Exception as e:
             raise Exception("Erro ao alugar filme: " + str(e))

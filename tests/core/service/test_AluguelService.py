@@ -12,7 +12,13 @@ mock_filme_repo = Mock()
 service = AluguelService(mock_aluguel_repo, mock_usuario_repo, mock_filme_repo)
 
 def test_alugar_sucesso():
-    mock_usuario_repo.get_by_id.return_value = Filme(
+    mock_usuario_repo.get_by_id.return_value = Usuario(
+        id=1,
+        nome="João da Silva",
+        email="joao.silva@example.com",
+        celular="123456789"
+    )
+    mock_filme_repo.get_by_id.return_value = Filme(
         id=1,
         nome="Marfia 1",
         genero="Ação",
@@ -20,15 +26,21 @@ def test_alugar_sucesso():
         sinopse="Uma sinopse fictícia.",
         diretor="Diretor Fictício"
     )
-    mock_filme_repo.get_by_id.return_value = Usuario(
+
+    mock_aluguel_repo.get_aluguel.return_value = None
+    mock_aluguel_repo.save.return_value = Aluguel(id=1,nota=None,data_aluguel=datetime.now(),usuario_id=1,filme_id=1, filme=Filme(
+        id=1,
+        nome="Marfia 1",
+        genero="Ação",
+        ano=2024,
+        sinopse="Uma sinopse fictícia.",
+        diretor="Diretor Fictício"
+    ), usuario=Usuario(
         id=1,
         nome="João da Silva",
         email="joao.silva@example.com",
         celular="123456789"
-    )
-
-    mock_aluguel_repo.get_aluguel.return_value = None
-    mock_aluguel_repo.save.return_value = None
+    ) )
 
 
     response = service.alugar(1, 1)
