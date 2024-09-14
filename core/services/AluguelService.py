@@ -27,7 +27,7 @@ class AluguelService:
                 return None
 
             novo_aluguel = Aluguel(usuario_id=id_usuario, filme_id=filme_obj.id, data_aluguel=datetime.now())
-            return self.repository.save(novo_aluguel)
+            return self.repository.save(novo_aluguel).to_dict()
 
         except Exception as e:
             raise Exception("Erro ao alugar filme: " + str(e))
