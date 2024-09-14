@@ -1,26 +1,49 @@
 from flask import Flask
+from flask_caching import Cache
 from flask_migrate import Migrate
+
 from infrastructure.db import db
-from adapters.controllers.FilmeController import filme
-from adapters.controllers.UserController import usuario
-from adapters.controllers.AluguelController import Aluguel
+from core.services.AluguelService import AluguelService
+from core.services.UserService import UserService
+from core.services.FilmeService import FilmeService
+from adapters.repository.UserRepository import UserRepository
+from adapters.repository.FilmeRepository import FilmeRepository
+from adapters.controllers.FilmeController import create_filme_blueprint
+from adapters.controllers.UserController import create_usuario_blueprint
+from adapters.repository.AluguelRepository import AluguelRepository
+from adapters.controllers.AluguelController import create_aluguel_blueprint
 from config import Config
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
     db.init_app(app)
+
+    cache = Cache(app)
     migrate = Migrate(app, db)
-    app.register_blueprint(filme)
-    app.register_blueprint(usuario)
-    app.register_blueprint(Aluguel)
+
+    filme_repository = FilmeRepository(db.session)
+    filme_service = FilmeService(repo=filme_repository)
+
+    user_repository = UserRepository(db.session)
+    usuario_service = UserService(repository=user_repository)
+
+    alugel_repository = AluguelRepository(db.session)
+    aluguel_service = AluguelService(repository=alugel_repository, filme_repository=filme_repository,
+                                     usuario_repository=user_repository)
+
+    app.register_blueprint(create_filme_blueprint(cache,filme_service))
+    app.register_blueprint(create_usuario_blueprint(cache, usuario_service))
+    app.register_blueprint(create_aluguel_blueprint(cache, aluguel_service))
+
     print(app.url_map)
     return app
 
 
 if __name__ == '__main__':
     app = create_app()
-    app.run(debug=True)
+
+    app.run()
 
 # problema um onde fica a função de alugar filme
 # em um service proprio do aluguel ou no usuario

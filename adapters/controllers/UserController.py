@@ -1,18 +1,26 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify , request
 
-from infrastructure.db import get_db
 from core.services.UserService import UserService
-from adapters.repository.UserRepository import UserRepository
 
-usuario = Blueprint('usuario', __name__)
-
-db = get_db()
-repository = UserRepository(db.session)
-usuario_service = UserService(repository=repository)
-
-@usuario.route('/usuario/<int:id_user>', methods=["GET"])
-def get_usuario_by_id(id_user):
-    user = usuario_service.get_by_id(id_user)
-    return jsonify(user)
+def create_usuario_blueprint(cache, usuario_service: UserService):
+    usuario = Blueprint('usuario', __name__)
 
 
+
+    @usuario.route('/usuario/<int:id_user>', methods=["GET"])
+    @cache.cached(timeout=300, key_prefix='usuario_by_id')
+    def get_usuario_by_id(id_user):
+        user = usuario_service.get_by_id(id_user)
+        if user is None:
+            return jsonify({'error': 'User not found'}),404
+        return jsonify(user)
+
+    @usuario.route('/usuario/', methods=["POST"])
+    def create_usuario():
+        usuario = request.json
+        criado = usuario_service.criar(usuario)
+        if criado is None:
+            return jsonify({'error': 'User not created'}),404
+        return jsonify(criado)
+
+    return usuario

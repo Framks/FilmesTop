@@ -1,29 +1,28 @@
-
 services:
   db-films-top:
     image: postgres:latest
     container_name: db-films-top
     environment:
       POSTGRES_DB: films-top
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     ports:
       - "5432:5432"
     volumes:
       - ./db_sql/schema.sql:/docker-entrypoint-initdb.d/schema.sql
       - films-top_data:/var/lib/postgresql/data
+    networks:
+      - my_network
 
-  app:
-    build: .
-    container_name: my-flask-app
-    command: ["sh", "-c", "wait-for-it.sh db-films-top:5432 -- flask run --host=0.0.0.0"]
-    environment:
-      FLASK_ENV: development
+  redis:
+    image: redis:latest
+    container_name: redis_films_top
     ports:
-      - "5000:5000"
-    depends_on:
-      - db-films-top
-
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - my_network
 
 networks:
   my_network:
@@ -31,3 +30,4 @@ networks:
 
 volumes:
   films-top_data:
+  redis-data:

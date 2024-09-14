@@ -18,3 +18,11 @@ class UserRepository:
             return self.db.query(Usuario).filter_by(id=user_id).first()
         except Exception as e:
             raise Exception(f"Não foi possível encontrar usuario: {str(e)}")
+
+    def save(self, usuario: Usuario):
+        try:
+            self.db.add(usuario)
+            self.db.commit()
+            return usuario.id
+        except Exception as e:
+            raise Exception(f"Não foi possível criar o usuario: {str(e)}")

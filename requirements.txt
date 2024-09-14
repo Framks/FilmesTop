@@ -4,5 +4,7 @@ Flask-Migrate
 pytest
 pytest-flask
 psycopg2-binary
-psycopg2
 Flask-SQLAlchemy
+pytest-mock
+Flask-Caching
+redis

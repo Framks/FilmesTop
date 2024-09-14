@@ -11,3 +11,11 @@ class Aluguel(db.Model):
 
     usuario = db.relationship('Usuario', backref='alugueis')
     filme = db.relationship('Filme', backref='alugueis')
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'nota': self.nota,
+            'data_aluguel': self.data_aluguel,
+            'nome_filme': self.filme.nome
+        }

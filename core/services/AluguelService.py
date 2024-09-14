@@ -16,41 +16,38 @@ class AluguelService:
         try:
             usuario = self.usuario_repository.get_by_id(id_usuario)
             if not usuario:
-                return {"message": "Usuário não encontrado"}, 404
+                return None
 
             filme_obj = self.filme_repository.get_by_id(filme_id)
             if not filme_obj:
-                return {"message": "Filme não encontrado"}, 404
+                return None
 
             aluguel_existente = self.repository.get_aluguel(id_usuario, filme_obj.id)
             if aluguel_existente:
-                return {"message": "Filme já alugado por este usuário"}, 409
+                return None
 
             novo_aluguel = Aluguel(usuario_id=id_usuario, filme_id=filme_obj.id, data_aluguel=datetime.now())
-            self.repository.save(novo_aluguel)
-            return {"message": "Filme alugado com sucesso"}, 201
+            return self.repository.save(novo_aluguel)
 
         except Exception as e:
             raise Exception("Erro ao alugar filme: " + str(e))
 
-
-
     def atribuir_nota(self, id_usuario, filme_id, nota):
         try:
             if nota < 0 or nota > 10:
-                return {"message": "Nota inválida. Deve estar entre 0 e 10"}, 400
+                return None
             usuario = self.usuario_repository.get_by_id(id_usuario)
 
             if not usuario:
-                return {"message": "Usuário não encontrado"}, 404
+                return None
 
             filme_obj = self.filme_repository.get_by_id(filme_id)
             if not filme_obj:
-                return {"message": "Filme não encontrado"}, 404
+                return None
 
             aluguel = self.repository.get_aluguel(id_usuario, filme_obj.id)
             if not aluguel:
-                return {"message": "Usuário não alugou este filme"}, 404
+                return None
 
             aluguel.nota = nota
             self.repository.save(aluguel)
@@ -58,3 +55,15 @@ class AluguelService:
 
         except Exception as e:
             raise Exception("Erro ao avaliar filmes: " + str(e))
+
+    def get_alugueis_by_id(self, id):
+        try:
+            alugueis = self.repository.get_all_by_user_id(id)
+            if alugueis is None:
+                return None
+            vetor_alugueis = []
+            for aluguel in alugueis:
+                vetor_alugueis.append(aluguel.to_dict())
+            return vetor_alugueis
+        except Exception as e:
+            raise Exception("Erro ao buscar alugueis: " + str(e))

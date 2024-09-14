@@ -1,26 +1,22 @@
 from flask import Blueprint, request, jsonify
 
-from adapters.repository.FilmeRepository import FilmeRepository
-from adapters.repository.UserRepository import UserRepository
 from core.services.AluguelService import AluguelService
-from adapters.repository.AluguelRepository import AluguelRepository
-from infrastructure.db import get_db
+def create_aluguel_blueprint(cache, aluguel_service: AluguelService):
+    aluguel_bp = Blueprint('aluguel', __name__)
 
-Aluguel = Blueprint('aluguel', __name__)
+    @aluguel_bp.route("/aluguel/usuario/<int:id_usuario>/alugar/<int:filme>", methods=["POST"])
+    def alugar(id_usuario, filme):
+        return jsonify(aluguel_service.alugar(id_usuario, filme))
 
-db = get_db()
-alugel_repository = AluguelRepository(db.session)
-filme_repository = FilmeRepository(db.session)
-user_repository = UserRepository(db.session)
-aluguel_service = AluguelService(repository=alugel_repository, filme_repository=filme_repository, usuario_repository=user_repository)
+    @aluguel_bp.route("/aluguel/usuario/<int:id>", methods=["GET"])
+    @cache.cached(timeout=300, key_prefix='get_aluguel_usuario_by_id')
+    def get_aluguel_by(id):
+        return jsonify(aluguel_service.get_alugueis_by_id(id))
 
-@Aluguel.route("/usuario/<int:id_usuario>/alugar/<int:filme>", methods=["POST"])
-def alugar(id_usuario, filme):
-    return jsonify(aluguel_service.alugar(id_usuario, filme))
+    @aluguel_bp.route("/aluguel/usuario/<int:id_usuario>/filme/<int:filme>", methods=["PUT"])
+    def filme(id_usuario, filme):
+        data = request.json
+        nota = data.get("nota")
+        return jsonify(aluguel_service.atribuir_nota(id_usuario, filme, nota))
 
-@Aluguel.route("/usuario/<int:id_usuario>/filme/<int:filme>", methods=["PUT"])
-def filme(id_usuario, filme):
-    data = request.json
-    nota = data.get("nota")
-    return jsonify(aluguel_service.atribuir_nota(id_usuario, filme, nota))
-
+    return aluguel_bp

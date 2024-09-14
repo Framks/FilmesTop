@@ -28,3 +28,11 @@ class FilmeRepository:
             return self.db.query(Filme).filter_by(genero=genero)
         except Exception as e:
             raise Exception(f"Não for encontrar genero: {str(e)}")
+
+    def save(self, professor):
+        try:
+            self.db.add(professor)
+            self.db.commit()
+            return self.db.query(Filme).filter_by(nome=professor.nome).first()
+        except Exception as e:
+            raise Exception(f"Erro ao criar o professor: {str(e)}")

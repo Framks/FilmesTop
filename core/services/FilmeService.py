@@ -16,8 +16,9 @@ class FilmeService:
 
     def get_by_id(self, id):
         try:
-            filme = self.repo.get_by_id(id).to_dict()
-            return filme
+            print(id)
+            filme = self.repo.get_by_id(id)
+            return filme.to_dict()
         except Exception as e:
             raise Exception("Erro ao buscar filme: " + str(e))
 
@@ -30,3 +31,11 @@ class FilmeService:
             return filmes
         except Exception as e:
             raise Exception("Erro ao buscar filmes por genero: " + str(e))
+
+    def criar(self, professor):
+        try:
+            self.repo.save(professor)
+            filme = self.repo.get_by_id(professor.id).to_dict()
+            return filme.to_dict()
+        except Exception as e:
+            raise Exception("Erro ao criar filme: " + str(e))
