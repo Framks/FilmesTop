@@ -71,6 +71,8 @@ Após configurar as dependências e rodar os testes, você pode iniciar a aplica
 
 ### Tabela de endpoints
 
+**Antes de consultar a tabela, verifique o arquivo `filmesTop.postman_collection.json`, localizado na pasta `docs`. Esse arquivo contém uma coleção de requisições do Postman, configurada para facilitar o uso dos endpoints da aplicação. Todas as configurações necessárias para realizar as requisições já estão prontas.**
+
 | Método HTTP | Endpoint                                               | Descrição                                      |
 |-------------|---------------------------------------------------------|------------------------------------------------|
 | GET         | `/filme/`                                               | Retorna todos os filmes.                       |
