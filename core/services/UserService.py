@@ -1,4 +1,5 @@
 from adapters.repository import UserRepository
+from core.models.Usuario import Usuario
 
 
 class UserService:
@@ -15,7 +16,7 @@ class UserService:
 
     def criar(self, usuario):
         try:
-            criado = self.repository.save(usuario)
+            criado = self.repository.save(Usuario(nome=usuario['nome'], email=usuario['email'],celular=usuario['celular']))
             return criado.to_disct()
         except Exception as e:
             raise Exception(f"Não foi possivel criar o usuario: {e}")

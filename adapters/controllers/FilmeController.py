@@ -31,9 +31,10 @@ def create_filme_blueprint(cache, filme_service: FilmeService):
 
     @filme.route('/filme/', methods=['POST'])
     def create_filme():
-        filme = filme_service.criar(request.json)
+        data = request.get_json()
+        filme = filme_service.criar(data)
         if not filme:
             return jsonify({'error': 'No filme created'}), 404
-        return jsonify(filme)
+        return jsonify(filme),201
 
     return filme

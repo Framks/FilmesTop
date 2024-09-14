@@ -32,4 +32,5 @@ class AluguelRepository:
             return aluguel
 
         except SQLAlchemyError as e:
+            self.db.rollback()
             raise Exception(f"Erro ao salvar aluguel: {str(e)}")

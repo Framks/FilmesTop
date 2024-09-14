@@ -23,6 +23,7 @@ class UserRepository:
         try:
             self.db.add(usuario)
             self.db.commit()
-            return usuario.id
+            return self.db.query(Usuario).filter_by(email=usuario.email,nome=usuario.nome).first()
         except Exception as e:
+            self.db.rollback()
             raise Exception(f"Não foi possível criar o usuario: {str(e)}")
