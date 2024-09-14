@@ -1,0 +1,250 @@
+{
+	"info": {
+		"_postman_id": "2ed66a5e-e828-4108-a26c-5ade33f152a9",
+		"name": "filmesTop",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30068110"
+	},
+	"item": [
+		{
+			"name": "get",
+			"item": [
+				{
+					"name": "filme by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{base}}/filme/id/2",
+							"protocol": "http",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"filme",
+								"id",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "all filmes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{base}}/filme",
+							"protocol": "http",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"filme"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "filmes by gender",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{base}}/filme/Terror",
+							"protocol": "http",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"filme",
+								"Terror"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get aluguel by id usuario",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get usuario",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{base}}/usuario/2",
+							"protocol": "http",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"usuario",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "post",
+			"item": [
+				{
+					"name": "alugar",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://{{base}}/aluguel/usuario/4/alugar/2",
+							"protocol": "http",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"aluguel",
+								"usuario",
+								"4",
+								"alugar",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "criar filme",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\":\"nome\",\n    \"genero\":\"genero\",\n    \"ano\":2000,\n    \"sinopse\":\"texto\",\n    \"diretor\":\"diretor\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{base}}/filme/",
+							"protocol": "http",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"filme",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "criar usuario",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\":\"nome\",\n    \"email\":\"email@email.com\",\n    \"celular\":88997766551\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{base}}/usuario/",
+							"protocol": "http",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"usuario",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "put",
+			"item": [
+				{
+					"name": "adcionar nota",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nota\": 9\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{base}}/aluguel/usuario/3/filme/2",
+							"protocol": "http",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"aluguel",
+								"usuario",
+								"3",
+								"filme",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base",
+			"value": "localhost:5000",
+			"type": "string"
+		}
+	]
+}
